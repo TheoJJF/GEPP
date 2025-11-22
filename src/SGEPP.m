@@ -59,5 +59,62 @@ Returns: U (Struct/Matrix), d (Vector)
         error("SGEPP:SingularMatrix","Matrix is singular.");
     end
 
-    
+    U = A.sparse_matrix;
+    subcol = zeros(n,1);
+    pivot_factor = zeros(n,1);
+
+    for i = 1:n-1
+        for j = i:n
+            subcol(j) = lookup(U{j},i,FallbackValue=0);
+        end
+
+        [Aii_max,i_max] = max(abs(subcol));
+
+        if abs(Aii_max) < 1e-8
+            error("SGEPP:SingularMatrix","Matrix is singular.");
+        end
+
+        if i ~= i_max
+            UTemp = U{i};
+            U{i} = U{i_max};
+            U{i_max} = UTemp;
+
+            b([i_max,i]) = b([i,i_max]);
+        end
+
+        pivot_recip = 1/Aii_max;
+
+        for j = i+1:n
+            if lookup(U{j},i,FallbackValue=0) ~= 0
+                pivot_factor(j) = U{j}(i)*pivot_recip;
+            end
+            U{j} = remove(U{j},i);
+
+            b(j) = b(j)-pivot_factor(j)*b(i);
+        end
+
+        subcol = subcol*0;
+
+        for j = i+1:n
+            for k = i+1:n
+                if lookup(U{j},k,FallbackValue=0) ~= 0
+                    if  lookup(U{i},k,FallbackValue=0) ~= 0
+                        updated_entry = U{j}(k)-pivot_factor(j)*U{i}(k);
+                    else
+                        updated_entry = U{j}(k);
+                    end
+                else
+                    continue
+                end
+
+                if abs(updated_entry) < 1e-8
+                    U{j} = remove(U{j},k);
+                else
+                    U{j}(k) = updated_entry;
+                end
+            end
+        end
+    end
+
+    d = b;
 end
