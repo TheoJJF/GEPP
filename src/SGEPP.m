@@ -96,21 +96,20 @@ Returns: U (Struct/Matrix), d (Vector)
         subcol = subcol*0;
 
         for j = i+1:n
-            for k = i+1:n
-                if lookup(U{j},k,FallbackValue=0) ~= 0
-                    if  lookup(U{i},k,FallbackValue=0) ~= 0
-                        updated_entry = U{j}(k)-pivot_factor(j)*U{i}(k);
-                    else
-                        updated_entry = U{j}(k);
-                    end
+            for k = 1:numEntries(U{j})
+                allKeys = keys(U{j});
+                kthKey = allKeys(k);
+
+                if  lookup(U{i},kthKey,FallbackValue=0) ~= 0
+                    updated_entry = U{j}(kthKey)-pivot_factor(j)*U{i}(kthKey);
                 else
-                    continue
+                    updated_entry = U{j}(kthKey);
                 end
 
                 if abs(updated_entry) < 1e-8
-                    U{j} = remove(U{j},k);
+                    U{j} = remove(U{j},kthKey);
                 else
-                    U{j}(k) = updated_entry;
+                    U{j}(kthKey) = updated_entry;
                 end
             end
         end
