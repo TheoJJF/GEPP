@@ -69,6 +69,7 @@ Returns: U (Struct/Matrix), d (Vector)
         end
 
         [Aii_max,i_max] = max(abs(subcol));
+        subcol = subcol*0;
 
         if abs(Aii_max) < 1e-8
             error("SGEPP:SingularMatrix","Matrix is singular.");
@@ -93,24 +94,21 @@ Returns: U (Struct/Matrix), d (Vector)
             b(j) = b(j)-pivot_factor(j)*b(i);
         end
 
-        subcol = subcol*0;
-
         for j = i+1:n
-            for k = i+1:n
-                if lookup(U{j},k,FallbackValue=0) ~= 0
-                    if  lookup(U{i},k,FallbackValue=0) ~= 0
-                        updated_entry = U{j}(k)-pivot_factor(j)*U{i}(k);
-                    else
-                        updated_entry = U{j}(k);
-                    end
+            for k = 1:numEntries(U{j})
+                all_keys = keys(U{j});
+                kth_key = all_keys(k);
+
+                if  lookup(U{i},kth_key,FallbackValue=0) ~= 0
+                    updated_entry = U{j}(kth_key)-pivot_factor(j)*U{i}(kth_key);
                 else
-                    continue
+                    updated_entry = U{j}(kth_key);
                 end
 
                 if abs(updated_entry) < 1e-8
-                    U{j} = remove(U{j},k);
+                    U{j} = remove(U{j},kth_key);
                 else
-                    U{j}(k) = updated_entry;
+                    U{j}(kth_key) = updated_entry;
                 end
             end
         end

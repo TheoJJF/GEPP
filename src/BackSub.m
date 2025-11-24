@@ -1,5 +1,5 @@
 function x = BackSub(U,d)
-    n = size(U,2);
+    n = size(U,1);
     x = zeros(n,1);
 
     x(n) = d(n)/U(n,n);
