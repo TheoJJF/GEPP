@@ -97,19 +97,19 @@ Returns: U (Struct/Matrix), d (Vector)
 
         for j = i+1:n
             for k = 1:numEntries(U{j})
-                allKeys = keys(U{j});
-                kthKey = allKeys(k);
+                all_keys = keys(U{j});
+                kth_key = all_keys(k);
 
-                if  lookup(U{i},kthKey,FallbackValue=0) ~= 0
-                    updated_entry = U{j}(kthKey)-pivot_factor(j)*U{i}(kthKey);
+                if  lookup(U{i},kth_key,FallbackValue=0) ~= 0
+                    updated_entry = U{j}(kth_key)-pivot_factor(j)*U{i}(kth_key);
                 else
-                    updated_entry = U{j}(kthKey);
+                    updated_entry = U{j}(kth_key);
                 end
 
                 if abs(updated_entry) < 1e-8
-                    U{j} = remove(U{j},kthKey);
+                    U{j} = remove(U{j},kth_key);
                 else
-                    U{j}(kthKey) = updated_entry;
+                    U{j}(kth_key) = updated_entry;
                 end
             end
         end
