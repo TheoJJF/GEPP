@@ -5,11 +5,6 @@ function x = SolveGEPP(A,b,TOL)
         TOL = 1e-12;
     end
 
-    [L,U,P] = GEPP(A,TOL);
-    if P == eye(size(A,1))
-        y = ForSub(L,b);
-    else
-        y = ForSub(L,P*b);
-    end
-    x = BackSub(U,y);
+    [~,U,~,d] = GEPP(A,b,TOL);
+    x = BackSub(U,d);
 end
