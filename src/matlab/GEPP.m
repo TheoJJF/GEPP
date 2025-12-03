@@ -1,4 +1,4 @@
-function [U,d] = GEPP(A,b)
+function [U,d] = GEPP(A,b,TOL)
 %{
 
 Perform Gaussian Elimination with Partial Pivoting (GEPP).
@@ -7,7 +7,7 @@ Parameters: A (Matrix), b (Vector)
 Note: A is assume to be nonsingular
     Error is thrown when the matrix is near/singular.
 
-Returns: U (Matrix), d (Vector)
+Returns: L (Matrix), U (Matrix), d (Vector)
 
 %}
 
@@ -26,7 +26,7 @@ Returns: U (Matrix), d (Vector)
     for i = 1:n-1
         [Aii_max,i_max_subcol] = max(abs(A(i:n,i)));
         
-        if abs(Aii_max) < 1e-6
+        if abs(Aii_max) < TOL
             error("GEPP:SingularMatrix","Matrix is singular.");
         end
 
@@ -52,7 +52,7 @@ Returns: U (Matrix), d (Vector)
         end
     end
     
-    if abs(A(n,n)) < 1e-6
+    if abs(A(n,n)) < TOL
         error("GEPP:SingularMatrix","Matrix is singular.");
     end
 

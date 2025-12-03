@@ -26,6 +26,10 @@ A.sparse_matrix =
     {[dictionary (double --> double) with 3 entries]}
     {[dictionary (double --> double) with 2 entries]}
 
+d =
+
+  dictionary(keys,values)
+
 Else, perform standard GEPP
 
 A =
