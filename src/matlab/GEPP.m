@@ -11,6 +11,11 @@ Returns: L (Matrix), U (Matrix), P (Matrix)
 
 %}
 
+    arguments
+        A;
+        TOL = 1e-12;
+    end
+
     [n,m] = size(A);
 
     if n ~= m
@@ -28,7 +33,7 @@ Returns: L (Matrix), U (Matrix), P (Matrix)
             error("GEPP:SingularMatrix","Matrix is singular.");
         end
 
-        i_max = i + i_max_subcol - 1;
+        i_max = i-1+i_max_subcol;
         
         if i ~= i_max
             A([i_max,i],:) = A([i,i_max],:);
