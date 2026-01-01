@@ -30,7 +30,7 @@ Returns: L (Matrix), U (Matrix), P (Matrix) d (Vector)
         [Aii_max,i_max_subcol] = max(abs(A(i:n,i)));
         
         if abs(Aii_max) < TOL
-            error("GEPP:SingularMatrix","Matrix is singular.");
+            error("GEPP:SingularMatrix","Matrix is near/singular.");
         end
 
         i_max = i-1+i_max_subcol;
@@ -60,7 +60,7 @@ Returns: L (Matrix), U (Matrix), P (Matrix) d (Vector)
     end
     
     if abs(A(n,n)) < TOL
-        error("GEPP:SingularMatrix","Matrix is singular.");
+        error("GEPP:SingularMatrix","Matrix is near/singular.");
     end
 
     U = A; L = L + eye(n); d = b;
